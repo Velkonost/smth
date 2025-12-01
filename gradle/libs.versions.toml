@@ -8,13 +8,23 @@ kotlinxDatetime = "0.6.2"
 kotlinxSerializationJSON = "1.8.1"
 kotlinxCoroutines = "1.10.2"
 
+koog = "0.4.2"
+ktor = "3.3.0"
+slf4j = "2.0.16"
+
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinxSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJSON" }
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 
-# Libraries can be bundled together for easier import
+koog-agents = { module = "ai.koog:koog-agents", version.ref = "koog" }
+koog-tools = { module = "ai.koog:agents-tools", version.ref = "koog" }
+koog-features-event-handler = { module = "ai.koog:agents-features-event-handler", version.ref = "koog" }
+
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
+
+# Bundles can be used to group зависимости для удобства
 [bundles]
 kotlinxEcosystem = ["kotlinxDatetime", "kotlinxSerialization", "kotlinxCoroutines"]
 

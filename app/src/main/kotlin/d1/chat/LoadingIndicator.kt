@@ -1,4 +1,4 @@
-package ru.aiadventchallenge.chat
+package d1.chat
 
 import kotlinx.coroutines.*
 

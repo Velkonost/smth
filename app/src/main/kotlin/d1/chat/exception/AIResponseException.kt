@@ -1,3 +1,3 @@
-package ru.aiadventchallenge.chat.exception
+package d1.chat.exception
 
 class AIResponseException: RuntimeException()
