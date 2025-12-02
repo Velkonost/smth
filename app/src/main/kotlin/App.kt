@@ -4,55 +4,34 @@ import ai.koog.prompt.executor.clients.openai.OpenAILLMClient
 import d1.chat.ChatHistory
 import d1.chat.OpenAIChatService
 import d1.chat.TerminalChatRunner
-import java.util.Properties
+import d2.agent.TypedAiAgentService
+import d2.chat.TypedTerminalChatRunner
 
 /**
- * Точка входа приложения.
+ * Точка входа по умолчанию.
  *
- * Сейчас приложение запускает простой терминальный чат с OpenAI.
+ * Сейчас можно легко переключаться между d1 и d2, не дублируя общий код.
  */
 fun main() {
     val apiKey = loadApiKey()
 
-    // Настраиваем клиента и сервисы по простым шагам
-    val client = OpenAILLMClient(apiKey)
-    val history = ChatHistory()
-    val chatService = OpenAIChatService(client, history)
-    val runner = TerminalChatRunner(chatService)
-
-    runner.run()
-}
-
-/**
- * Загружает API ключ из config.properties (classpath) или переменной окружения.
- *
- * Порядок приоритета:
- * 1) config.properties: OPENAI_API_KEY
- * 2) переменная окружения OPENAI_API_KEY
- */
-private fun loadApiKey(): String {
-    val props = Properties()
-
-    // Пытаемся прочитать config.properties из ресурсов
-    val resourceStream = Thread.currentThread()
-        .contextClassLoader
-        .getResourceAsStream("config.properties")
-
-    val apiKeyFromFile = resourceStream?.use { stream ->
-        props.load(stream)
-        props.getProperty("OPENAI_API_KEY")
+    // Реализация для d1
+    val d1App = TerminalChatApplication {
+        val client = OpenAILLMClient(apiKey)
+        val history = ChatHistory()
+        val chatService = OpenAIChatService(client, history)
+        val runner = TerminalChatRunner(chatService)
+        runner.run()
     }
 
-    val apiKey = apiKeyFromFile ?: System.getenv("OPENAI_API_KEY")
-
-    if (apiKey.isNullOrBlank()) {
-        println("ERROR: API ключ не найден.")
-        println("Установите его либо в app/src/main/resources/config.properties (ключ OPENAI_API_KEY),")
-        println("либо в переменную окружения OPENAI_API_KEY и перезапустите приложение.")
-        throw IllegalStateException("OPENAI_API_KEY is not configured")
+    // Реализация для d2 (типизированный ответ AiAnswer)
+    val d2App = TerminalChatApplication {
+        val service = TypedAiAgentService(apiKey)
+        val runner = TypedTerminalChatRunner(service)
+        runner.run()
     }
 
-    return apiKey
+    // По умолчанию запускаем d1-чат; d2 можно вызвать из другого main или переключателем
+    d2App.run()
 }
-
 
