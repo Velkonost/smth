@@ -5,6 +5,7 @@ import d1.chat.ChatHistory
 import d1.chat.OpenAIChatService
 import d1.chat.TerminalChatRunner
 import d2.agent.TypedAiAgentService
+import d2.chat.TypedChatHistory
 import d2.chat.TypedTerminalChatRunner
 
 /**
@@ -27,7 +28,8 @@ fun main() {
     // Реализация для d2 (типизированный ответ AiAnswer)
     val d2App = TerminalChatApplication {
         val service = TypedAiAgentService(apiKey)
-        val runner = TypedTerminalChatRunner(service)
+        val history = TypedChatHistory()
+        val runner = TypedTerminalChatRunner(service, history)
         runner.run()
     }
 

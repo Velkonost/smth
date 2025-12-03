@@ -1,6 +1,7 @@
 package org.example.app
 
 import d2.agent.TypedAiAgentService
+import d2.chat.TypedChatHistory
 import d2.chat.TypedTerminalChatRunner
 
 /**
@@ -10,9 +11,9 @@ fun main() {
     val apiKey = loadApiKey()
 
     val service = TypedAiAgentService(apiKey)
-    val runner = TypedTerminalChatRunner(service)
+    val history = TypedChatHistory()
+    val runner = TypedTerminalChatRunner(service, history)
 
     runner.run()
 }
-
 

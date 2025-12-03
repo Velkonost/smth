@@ -11,10 +11,12 @@ import kotlinx.coroutines.runBlocking
  * На каждый ввод пользователя:
  * - отправляет промпт в типизированного агента;
  * - показывает индикатор загрузки;
- * - выводит result, original и вопросы из AiAnswer.
+ * - выводит result, original и вопросы из AiAnswer;
+ * - сохраняет ход диалога в TypedChatHistory.
  */
 class TypedTerminalChatRunner(
-    private val agentService: TypedAiAgentService
+    private val agentService: TypedAiAgentService,
+    private val history: TypedChatHistory
 ) {
 
     private val loadingIndicator = LoadingIndicator()
@@ -46,6 +48,9 @@ class TypedTerminalChatRunner(
                     agentService.ask(userInput)
                 }
 
+                // Сохраняем шаг диалога в историю
+                history.addTurn(userInput, answer)
+
                 println()
                 println("ai.result   > ${answer.result ?: "<пусто>"}")
                 println("ai.original > ${"%.1f".format(answer.original)} %")
@@ -67,5 +72,4 @@ class TypedTerminalChatRunner(
         }
     }
 }
-
 
