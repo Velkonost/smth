@@ -6,6 +6,7 @@ import ai.koog.agents.core.tools.ToolRegistry
 import ai.koog.prompt.dsl.prompt
 import ai.koog.prompt.executor.clients.openai.OpenAIModels
 import ai.koog.prompt.executor.llms.all.simpleOpenAIExecutor
+import ai.koog.prompt.params.LLMParams
 import d2.model.AiAnswer
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -24,7 +25,9 @@ class TypedAiAgentService(
     private val toolRegistry = ToolRegistry { }
 
     // Простой executor для OpenAI моделей
-    private val executor = simpleOpenAIExecutor(apiKey)
+    private val executor = simpleOpenAIExecutor(
+        apiToken = apiKey,
+    )
 
     // Агент Koog, который будет исполнять нашу стратегию.
     // Обрати внимание: generic-параметр результата соответствует AiAnswer.
@@ -34,7 +37,7 @@ class TypedAiAgentService(
             promptExecutor = executor,
             strategy = typedAnswerStrategy,
             agentConfig = AIAgentConfig(
-                prompt = prompt("typed-answer-prompt") {
+                prompt = prompt("typed-answer-prompt", params = LLMParams(temperature = 1.2)) {
                     system(
                         """
                             Ты — помощник, который всегда отвечает в строго структурированной форме AiAnswer.
